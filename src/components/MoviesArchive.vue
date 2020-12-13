@@ -31,7 +31,7 @@ export default {
   data: () => ({
   }),
   created() {
-    this.fetchMovies()
+    this.fetchMovies({whatMovies: 'popular', region: null})
   },
   computed: mapGetters(['movies']),
   methods: {

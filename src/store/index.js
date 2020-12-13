@@ -18,13 +18,24 @@ export default new Vuex.Store({
   },
   actions: {
     //asyncronous
-    async fetchMovies({commit}) {
-      const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`)
-      commit('setMovies', response.data)
+    async fetchMovies({commit}, info) {
+      try {
+        const url = info.region ? `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}&region=${info.region}` : `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}`
+        const response = await axios.get(url)
+
+        commit('setMovies', response.data)
+      } catch(e) {
+        console.log('error: ', e);
+      }
     },
     async searchMovies({commit}, name) {
-      const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${name}`)
-      commit('setMovies', response.data)
+      try {
+        const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${name}`)
+          
+        commit('setMovies', response.data)
+      } catch(e) {
+        console.log('error: ', e);
+      }
     }
   },
   modules: {

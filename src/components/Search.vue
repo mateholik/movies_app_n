@@ -8,6 +8,7 @@
           counter="100"
           hint="Type movie name"
           label="Search"
+          @keydown.enter="search"
         ></v-text-field>
       </v-col>
       <v-col cols="2" class="d-flex align-center">
@@ -30,6 +31,6 @@ export default {
     search() {
       this.searchMovies(this.searchInput)
     }
-  },
+  }
 };
 </script>
