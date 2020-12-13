@@ -5,9 +5,9 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
+      <router-link to="/" class="d-flex align-center white--text text-decoration-none">
         <h1>Movies app</h1>
-      </div>
+      </router-link>
 
       <v-spacer></v-spacer>
 
@@ -23,7 +23,6 @@
 
     <v-main>
       <router-view></router-view>
-
     </v-main>
   </v-app>
 </template>
@@ -31,12 +30,18 @@
 <script>
 
 
-
+import { mapActions } from 'vuex'
 export default {
   name: 'App',
 
   data: () => ({
     //
   }),
+  created() {
+    this.fetchMovies({whatMovies: 'popular', region: null})
+  },
+  methods: {
+    ...mapActions(['fetchMovies'])
+  }
 };
 </script>
