@@ -17,7 +17,7 @@ export default new Vuex.Store({
       state.movies = filteredData
     },
     setSingleMovie(state, payload) {
-      state.singleMovie = state.movies.filter(el => el.id === payload *1)[0]
+      state.singleMovie = payload
     }
   },
   actions: {
@@ -41,8 +41,25 @@ export default new Vuex.Store({
         console.log('error: ', e);
       }
     },
-    singleMovieById({commit}, id) {
-      commit('setSingleMovie', id)
+    async singleMovieById({commit}, id) {
+      try {
+        const movieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`)
+        const movieVideo = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`)
+        const movieReviews = await axios.get(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${API_KEY}`)
+        const movieSimilarMovies = await axios.get(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${API_KEY}`)
+
+        const dataObject = {
+          info: movieInfo.data,
+          video: movieVideo.data,
+          reviews: movieReviews.data,
+          similar: movieSimilarMovies.data
+        }
+        console.log(dataObject);
+        commit('setSingleMovie', dataObject)
+      } catch(e) {
+        console.log('error: ', e);
+      }
+
     }
   },
   modules: {
