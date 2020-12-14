@@ -8,7 +8,7 @@ const API_KEY = 'fac833a43a16bfefed079cdf238d006f'
 export default new Vuex.Store({
   state: {
     movies: [],
-    singleMovie: {}
+    singleMovie: 'loading'
   },
   mutations: {
     //syncronous
@@ -18,15 +18,19 @@ export default new Vuex.Store({
     },
     setSingleMovie(state, payload) {
       state.singleMovie = payload
+    },
+    resetSingleMovie(state, payload) {
+      state.singleMovie = payload
     }
   },
   actions: {
     //asyncronous
     async fetchMovies({commit}, info) {
       try {
-        console.log('fetchinam');
+
         const url = info.region ? `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}&region=${info.region}` : `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}`
         const response = await axios.get(url)
+        console.log(response);
         commit('setMovies', response.data)
       } catch(e) {
         console.log('error: ', e);
@@ -45,21 +49,24 @@ export default new Vuex.Store({
       try {
         const movieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`)
         const movieVideo = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`)
-        const movieReviews = await axios.get(`https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${API_KEY}`)
+        const movieCredits = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}`)
         const movieSimilarMovies = await axios.get(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${API_KEY}`)
 
         const dataObject = {
           info: movieInfo.data,
           video: movieVideo.data,
-          reviews: movieReviews.data,
+          credits: movieCredits.data,
           similar: movieSimilarMovies.data
         }
+
         console.log(dataObject);
         commit('setSingleMovie', dataObject)
       } catch(e) {
         console.log('error: ', e);
       }
-
+    },
+    singleMovieReset({commit}) {
+        commit('resetSingleMovie', 'loading')
     }
   },
   modules: {

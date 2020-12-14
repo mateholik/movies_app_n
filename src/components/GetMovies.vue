@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="d-flex align-center">
-        <v-btn @click="getMovies('top_rated')" color="primary" class="mr-4">Top Rated</v-btn>
-        <v-btn @click="getMovies('popular')" color="primary" class="mr-4">Popular</v-btn>
-        <v-btn @click="getMovies('now_playing')" color="primary" class="mr-4">Now Playing</v-btn>
-        <v-btn @click="getMovies('now_playing', 'IN')" color="primary" class="mr-4">Now Playing (India)</v-btn>
-        <v-btn @click="getMovies('upcoming')" color="primary">Upcoming</v-btn>
+      <v-col cols="12" class="">
+        <v-btn @click="getMovies('top_rated')" color="primary" class="mr-4 mb-4">Top Rated</v-btn>
+        <v-btn @click="getMovies('popular')" color="primary" class="mr-4 mb-4">Popular</v-btn>
+        <v-btn @click="getMovies('now_playing')" color="primary" class="mr-4 mb-4">Now Playing</v-btn>
+        <v-btn @click="getMovies('now_playing', 'IN')" color="primary" class="mr-4 mb-4">Now Playing (India)</v-btn>
+        <v-btn @click="getMovies('upcoming')" color="primary" class="mr-4 mb-4">Upcoming</v-btn>
       </v-col>
     </v-row>
   </v-container>

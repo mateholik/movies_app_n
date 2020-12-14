@@ -45,3 +45,11 @@ export default {
   }
 };
 </script>
+
+<style media="screen">
+@media (min-width: 1904px) {
+  .container {
+    max-width: 1400px!important;
+  }
+}
+</style>
