@@ -1,5 +1,22 @@
 <template>
   <div class="text-center">
+    <v-snackbar
+        v-model="snackBar"
+        :timeout="3000"
+      >
+        Page nr.: {{ pagination.currentPage }} loaded
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="red"
+            text
+            v-bind="attrs"
+            @click="snackBar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     <v-container>
       <v-row justify="center">
         <v-col cols="8">
@@ -23,14 +40,20 @@ export default {
   name: "Pagination",
   data: () => ({
     searchInput: "",
+    snackBar: false,
     rules: [(v) => v.length <= 100 || "Max 100 characters"],
   }),
   computed: mapGetters(['pagination']),
   methods: {
-      ...mapActions(['fetchMovies']),
+      ...mapActions(['fetchMovies', 'searchMovies']),
     changePage(number) {
       window.scrollTo({top: 0, behavior: 'smooth'});
-      this.fetchMovies({whatMovies: this.pagination.moviesType, page: number}) //add page number
+      if(this.pagination.search === true) {
+        this.searchMovies({query: this.pagination.searchQuery, page: number})
+      } else {
+        this.fetchMovies({whatMovies: this.pagination.moviesType, page: number})
+      }
+      this.snackBar = true
     }
   }
 };

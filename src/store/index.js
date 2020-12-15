@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     movies: [],
     pagination: {},
-    singleMovie: 'loading'
+    singleMovie: 'loading',
+    searchLoader: false
   },
   mutations: {
     //syncronous
@@ -26,26 +27,25 @@ export default new Vuex.Store({
     },
     resetSingleMovie(state, payload) {
       state.singleMovie = payload
+    },
+    toggleSearchLoader(state, payload) {
+      state.searchLoader = payload
     }
   },
   actions: {
     //asyncronous
     async fetchMovies({commit}, info) {
       try {
-
-        // const url = info.region ? `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}&region=${info.region}` : `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}`
-        console.log(info);
         const url = `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}${info.region ? '&region=' + info.region : ''}${info.page ? '&page=' + info.page : ''}`
-        console.log(url);
-
         const response = await axios.get(url)
-        console.log(response);
         commit('setMovies', response.data)
 
         const pagination = {
           currentPage: response.data.page,
           totalPages: response.data.total_pages,
-          moviesType: info.whatMovies
+          moviesType: info.whatMovies,
+          search: false,
+          searchQuery: null
         }
         console.log(pagination);
         commit('setPagination', pagination)
@@ -53,11 +53,24 @@ export default new Vuex.Store({
         console.log('error: ', e);
       }
     },
-    async searchMovies({commit}, name) {
+    async searchMovies({commit}, info) {
       try {
-        const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${name}`)
-
+        commit('toggleSearchLoader', true)
+        const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${info.query}${info.page ? '&page=' + info.page : ''}`
+        const response = await axios.get(url)
+        console.log(response.data);
         commit('setMovies', response.data)
+        commit('toggleSearchLoader', false)
+
+        const pagination = {
+          currentPage: response.data.page,
+          totalPages: response.data.total_pages,
+          moviesType: null,
+          search: true,
+          searchQuery: info.query
+        }
+        console.log(pagination);
+        commit('setPagination', pagination)
       } catch(e) {
         console.log('error: ', e);
       }
@@ -76,7 +89,6 @@ export default new Vuex.Store({
           similar: movieSimilarMovies.data
         }
 
-        console.log(dataObject);
         commit('setSingleMovie', dataObject)
       } catch(e) {
         console.log('error: ', e);
@@ -97,6 +109,9 @@ export default new Vuex.Store({
     },
     singleMovie(state) {
       return state.singleMovie
+    },
+    searchLoader(state) {
+        return state.searchLoader
     }
   }
 })
