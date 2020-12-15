@@ -2,6 +2,7 @@
   <div>
     <Search/>
     <GetMovies/>
+    <Genres/>
     <MoviesArchive/>
     <Pagination/>
   </div>
@@ -14,13 +15,15 @@ import Search from '@/components/Search';
 import GetMovies from '@/components/GetMovies';
 import MoviesArchive from '@/components/MoviesArchive';
 import Pagination from '@/components/Pagination';
+import Genres from '@/components/Genres';
 export default {
   name: 'Home',
   components: {
     Search,
     GetMovies,
     MoviesArchive,
-    Pagination
+    Pagination,
+    Genres
   },
 }
 </script>

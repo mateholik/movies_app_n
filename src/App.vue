@@ -39,9 +39,10 @@ export default {
   }),
   created() {
     this.fetchMovies({whatMovies: 'popular'})
+    this.movieGenresList()
   },
   methods: {
-    ...mapActions(['fetchMovies'])
+    ...mapActions(['fetchMovies', 'movieGenresList'])
   }
 };
 </script>
