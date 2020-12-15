@@ -38,7 +38,7 @@ export default {
     //
   }),
   created() {
-    this.fetchMovies({whatMovies: 'popular', region: null})
+    this.fetchMovies({whatMovies: 'popular'})
   },
   methods: {
     ...mapActions(['fetchMovies'])

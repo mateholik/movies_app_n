@@ -8,6 +8,7 @@ const API_KEY = 'fac833a43a16bfefed079cdf238d006f'
 export default new Vuex.Store({
   state: {
     movies: [],
+    pagination: {},
     singleMovie: 'loading'
   },
   mutations: {
@@ -15,6 +16,10 @@ export default new Vuex.Store({
     setMovies(state, payload) {
       const filteredData = payload.results.filter(e => e.poster_path !== null)
       state.movies = filteredData
+    },
+    setPagination(state, payload) {
+
+      state.pagination = payload
     },
     setSingleMovie(state, payload) {
       state.singleMovie = payload
@@ -28,10 +33,22 @@ export default new Vuex.Store({
     async fetchMovies({commit}, info) {
       try {
 
-        const url = info.region ? `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}&region=${info.region}` : `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}`
+        // const url = info.region ? `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}&region=${info.region}` : `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}`
+        console.log(info);
+        const url = `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}${info.region ? '&region=' + info.region : ''}${info.page ? '&page=' + info.page : ''}`
+        console.log(url);
+
         const response = await axios.get(url)
         console.log(response);
         commit('setMovies', response.data)
+
+        const pagination = {
+          currentPage: response.data.page,
+          totalPages: response.data.total_pages,
+          moviesType: info.whatMovies
+        }
+        console.log(pagination);
+        commit('setPagination', pagination)
       } catch(e) {
         console.log('error: ', e);
       }
@@ -74,6 +91,9 @@ export default new Vuex.Store({
   getters: {
     movies(state) {
       return state.movies
+    },
+    pagination(state) {
+        return state.pagination
     },
     singleMovie(state) {
       return state.singleMovie
