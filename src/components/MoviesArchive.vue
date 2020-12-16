@@ -1,11 +1,11 @@
 <template>
-  <v-container>
+  <div>
     <v-row>
-      <v-col cols="12 d-flex flex-wrap">
+      <v-col v-if="!searchLoader" cols="12 d-flex flex-wrap justify-start">
         <v-card
           v-for="movie in movies"
           :key="movie.id"
-          class="mx-auto my-12"
+          class="mx-auto mb-12"
           max-width="300"
           :to="'/movie-single/' + movie.id"
         >
@@ -21,8 +21,11 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <div v-else class="d-flex justify-center" style="width: 100%; height: 80vh;">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      </div>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -31,7 +34,7 @@ export default {
   name: "MoviesArchive",
   data: () => ({
   }),
-  computed: mapGetters(['movies']),
+  computed: mapGetters(['movies', 'searchLoader']),
   methods: {
     truncate(val) {
       const length = 200

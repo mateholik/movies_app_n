@@ -20,7 +20,6 @@ export default new Vuex.Store({
       state.movies = filteredData
     },
     setPagination(state, payload) {
-
       state.pagination = payload
     },
     setSingleMovie(state, payload) {
@@ -40,41 +39,50 @@ export default new Vuex.Store({
     //asyncronous
     async fetchMovies({commit}, info) {
       try {
+        commit('toggleSearchLoader', true)
         const url = `https://api.themoviedb.org/3/movie/${info.whatMovies}?api_key=${API_KEY}${info.region ? '&region=' + info.region : ''}${info.page ? '&page=' + info.page : ''}`
 
         const response = await axios.get(url)
-    
         commit('setMovies', response.data)
 
         const pagination = {
           currentPage: response.data.page,
           totalPages: response.data.total_pages,
           moviesType: info.whatMovies,
-          search: false,
-          searchQuery: null
+          paginationType: 'fetch',
+          searchQuery: null,
+          filterQueries: null
         }
         commit('setPagination', pagination)
+        commit('toggleSearchLoader', false)
+
       } catch(e) {
         console.log('error: ', e);
       }
     },
     async filterMovies({commit}, info) {
       try {
-        const url = `https://api.themoviedb.org/3/discover/movie/?api_key=${API_KEY}${info.discoverIds ? '&with_genres=' + info.discoverIds : ''}${info.rating ? '&vote_average.gte=' + String(info.rating) + '&vote_average.lte=' + String(info.rating + 1) : ''}${info.year ? '&primary_release_year=' + info.year : ''}`
+        commit('toggleSearchLoader', true)
+        const url = `https://api.themoviedb.org/3/discover/movie/?api_key=${API_KEY}${info.discoverIds ? '&with_genres=' + info.discoverIds : ''}${info.rating ? '&vote_average.gte=' + String(info.rating) + '&vote_average.lte=' + String(info.rating + 1) : ''}${info.year ? '&primary_release_year=' + info.year : ''}${info.page ? '&page=' + info.page : ''}`
 
-        console.log(url);
         const response = await axios.get(url)
-
         commit('setMovies', response.data)
 
         const pagination = {
           currentPage: response.data.page,
           totalPages: response.data.total_pages,
           moviesType: info.whatMovies,
-          search: false,
-          searchQuery: null
+          paginationType: 'filter',
+          searchQuery: null,
+          filterQueries: {
+            ids: info.discoverIds,
+            rating: info.rating,
+            year: info.year
+          }
         }
         commit('setPagination', pagination)
+        commit('toggleSearchLoader', false)
+
       } catch(e) {
         console.log('error: ', e);
       }
@@ -94,6 +102,7 @@ export default new Vuex.Store({
       try {
         commit('toggleSearchLoader', true)
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${info.query}${info.page ? '&page=' + info.page : ''}`
+        
         const response = await axios.get(url)
         commit('setMovies', response.data)
         commit('toggleSearchLoader', false)
@@ -102,10 +111,12 @@ export default new Vuex.Store({
           currentPage: response.data.page,
           totalPages: response.data.total_pages,
           moviesType: null,
-          search: true,
-          searchQuery: info.query
+          paginationType: 'search',
+          searchQuery: info.query,
+          filterQueries: null
         }
         commit('setPagination', pagination)
+
       } catch(e) {
         console.log('error: ', e);
       }
@@ -123,6 +134,7 @@ export default new Vuex.Store({
           credits: movieCredits.data,
           similar: movieSimilarMovies.data
         }
+        console.log(dataObject);
 
         commit('setSingleMovie', dataObject)
       } catch(e) {

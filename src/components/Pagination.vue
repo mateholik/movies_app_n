@@ -2,35 +2,37 @@
   <div class="text-center">
     <v-snackbar
         v-model="snackBar"
-        :timeout="3000"
+        :timeout="2000"
+        color="success"
       >
-        Page nr.: {{ pagination.currentPage }} loaded
+        <span class="font-weight-medium">Page {{ pagination.currentPage }} loaded</span>
 
         <template v-slot:action="{ attrs }">
           <v-btn
-            color="red"
-            text
             v-bind="attrs"
+             color="danger"
+             small
             @click="snackBar = false"
           >
             Close
           </v-btn>
         </template>
       </v-snackbar>
-    <v-container>
+    <div>
       <v-row justify="center">
         <v-col cols="8">
-          <v-container class="max-width">
+          <div>
             <v-pagination
               v-model="pagination.currentPage"
               class="my-4"
               :length="pagination.totalPages"
               @input="changePage"
+              total-visible="7"
             ></v-pagination>
-          </v-container>
+          </div>
         </v-col>
       </v-row>
-    </v-container>
+    </div>
   </div>
 </template>
 
@@ -45,13 +47,17 @@ export default {
   }),
   computed: mapGetters(['pagination']),
   methods: {
-      ...mapActions(['fetchMovies', 'searchMovies']),
+    ...mapActions(['fetchMovies', 'searchMovies', 'filterMovies']),
     changePage(number) {
-      window.scrollTo({top: 0, behavior: 'smooth'});
-      if(this.pagination.search === true) {
+      const scrollHere = document.getElementById('scrollHere').offsetTop
+      console.log(scrollHere);
+      window.scrollTo({top: scrollHere, behavior: 'smooth'});
+      if(this.pagination.paginationType === 'search') {
         this.searchMovies({query: this.pagination.searchQuery, page: number})
-      } else {
+      } else if(this.pagination.paginationType === 'fetch') {
         this.fetchMovies({whatMovies: this.pagination.moviesType, page: number})
+      } else if(this.pagination.paginationType === 'filter') {
+        this.filterMovies({discoverIds: this.pagination.filterQueries.ids, rating: this.pagination.filterQueries.rating, year: this.pagination.filterQueries.year, page: number})
       }
       this.snackBar = true
     }

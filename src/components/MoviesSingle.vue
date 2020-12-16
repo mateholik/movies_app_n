@@ -2,9 +2,9 @@
   <v-container>
     <div v-if="singleMovie != 'loading'">
       <v-row>
-        <v-col :sm="8" :md="4" class="mx-auto">
+        <v-col cols="8" :md="4" class="mx-auto">
           <v-img :src="'https://image.tmdb.org/t/p/w400/' + singleMovie.info.poster_path"></v-img>
-          <p class="my-4">
+          <!-- <p class="my-4">
             <span v-if="singleMovie.info.tagline.length > 0">
               <strong>Tagline:</strong>
                {{singleMovie.info.tagline}}
@@ -12,7 +12,18 @@
             <span v-else>
               No tagline available fot this movie
             </span>
-          </p>
+          </p> -->
+          <div class="">
+            <v-btn
+              class="mt-4 mx-auto"
+              color="primary"
+              large
+              :href="'https://www.imdb.com/title/' + singleMovie.info.imdb_id"
+              target="_blank"
+            >
+              Open in IMDB
+            </v-btn>
+          </div>
         </v-col>
         <v-col :md="8">
           <h1 class="mb-2">{{singleMovie.info.original_title}} <span class="grey--text font-weight-regular">({{returnYear(singleMovie.info.release_date)}})</span> </h1>
@@ -37,7 +48,7 @@
             </span>
           </p>
           <div class="">
-            <h2>Actors</h2>
+            <h2 class="mb-4">Actors</h2>
             <div class="d-flex" style="overflow-x: scroll;">
               <div v-for="actor in singleMovie.credits.cast" :key="actor.cast_id" class="mr-3">
                 <v-card height="100%" width="130px">
@@ -57,8 +68,8 @@
           </div>
         </v-col>
       </v-row>
-      <div>
-        <h2>Videos</h2>
+      <div class="mt-8">
+        <h2 class="mb-4">Videos</h2>
         <div v-if="singleMovie.video.results.length != 0">
           <div class="d-flex" style="overflow-x: scroll;">
             <div v-for="video in singleMovie.video.results" :key="video.id">
@@ -128,62 +139,4 @@ iframe {
     height: 280px;
   }
 }
-
-/* loader */
-.lds-ellipsis {
-display: inline-block;
-position: relative;
-width: 80px;
-height: 80px;
-}
-.lds-ellipsis div {
-position: absolute;
-top: 33px;
-width: 13px;
-height: 13px;
-border-radius: 50%;
-background: #000;
-animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-left: 8px;
-animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-left: 8px;
-animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-left: 32px;
-animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-left: 56px;
-animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-0% {
-  transform: scale(0);
-}
-100% {
-  transform: scale(1);
-}
-}
-@keyframes lds-ellipsis3 {
-0% {
-  transform: scale(1);
-}
-100% {
-  transform: scale(0);
-}
-}
-@keyframes lds-ellipsis2 {
-0% {
-  transform: translate(0, 0);
-}
-100% {
-  transform: translate(24px, 0);
-}
-}
-
 </style>

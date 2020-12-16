@@ -1,24 +1,20 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col :md="6">
-        <v-form class="d-flex align-center" ref="form" @submit.prevent="search">
-          <v-text-field
-            ref="input"
-            prepend-icon="mdi-file"
-            v-model="searchInput"
-            :rules="rules"
-            counter="100"
-            hint="Type movie name"
-            label="Search"
-            keydown.enter="search"
+  <div>
+    <v-form class="d-flex align-center" ref="form" @submit.prevent="search">
+      <v-text-field
+        ref="input"
+        prepend-icon="mdi-file"
+        v-model="searchInput"
+        :rules="rules"
+        counter="100"
+        hint="Type movie name"
+        label="Search"
+        keydown.enter="search"
 
-          ></v-text-field>
-          <v-btn @click="search" :loading="searchLoader" color="success" class="ml-8">Search</v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+      ></v-text-field>
+      <v-btn @click="search" :loading="searchLoader" color="success" class="ml-8">Search</v-btn>
+    </v-form>
+  </div>
 </template>
 
 <script>
