@@ -50,7 +50,6 @@ export default {
     ...mapActions(['fetchMovies', 'searchMovies', 'filterMovies']),
     changePage(number) {
       const scrollHere = document.getElementById('scrollHere').offsetTop
-      console.log(scrollHere);
       window.scrollTo({top: scrollHere, behavior: 'smooth'});
       if(this.pagination.paginationType === 'search') {
         this.searchMovies({query: this.pagination.searchQuery, page: number})

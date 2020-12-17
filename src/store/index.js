@@ -63,7 +63,7 @@ export default new Vuex.Store({
     async filterMovies({commit}, info) {
       try {
         commit('toggleSearchLoader', true)
-        const url = `https://api.themoviedb.org/3/discover/movie/?api_key=${API_KEY}${info.discoverIds ? '&with_genres=' + info.discoverIds : ''}${info.rating ? '&vote_average.gte=' + String(info.rating) + '&vote_average.lte=' + String(info.rating + 1) : ''}${info.year ? '&primary_release_year=' + info.year : ''}${info.page ? '&page=' + info.page : ''}`
+        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}${info.discoverIds ? '&with_genres=' + info.discoverIds : ''}${info.rating ? '&vote_average.gte=' + String(info.rating) + '&vote_average.lte=' + String(info.rating + 1) : ''}${info.year ? '&primary_release_year=' + info.year : ''}${info.page ? '&page=' + info.page : ''}`
 
         const response = await axios.get(url)
         commit('setMovies', response.data)
@@ -102,7 +102,7 @@ export default new Vuex.Store({
       try {
         commit('toggleSearchLoader', true)
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${info.query}${info.page ? '&page=' + info.page : ''}`
-        
+
         const response = await axios.get(url)
         commit('setMovies', response.data)
         commit('toggleSearchLoader', false)
@@ -134,7 +134,6 @@ export default new Vuex.Store({
           credits: movieCredits.data,
           similar: movieSimilarMovies.data
         }
-        console.log(dataObject);
 
         commit('setSingleMovie', dataObject)
       } catch(e) {

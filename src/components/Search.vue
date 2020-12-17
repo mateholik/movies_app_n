@@ -34,8 +34,6 @@ export default {
         this.$refs.form.reset()
         this.$refs.input.blur()
         this.searchInput = ''
-      } else {
-        console.log('not valid');
       }
     }
   }

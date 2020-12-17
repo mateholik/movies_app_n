@@ -108,7 +108,6 @@ export default {
     this.singleMovieById(this.id);
   },
   destroyed() {
-    console.log('miriau');
     this.singleMovieReset();
   },
   computed: mapGetters(['singleMovie']),
